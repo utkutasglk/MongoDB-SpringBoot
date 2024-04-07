@@ -3,6 +3,7 @@ package in.example.springbootmongodb.controller;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import in.example.springbootmongodb.dto.TodoWrapper;
 import in.example.springbootmongodb.model.TodoDTO;
 import in.example.springbootmongodb.repository.ToDoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,19 @@ public class TodoController {
       }
     }
 
+    @PostMapping("/todos")
+    public ResponseEntity<?> createTodo(@RequestBody TodoWrapper todoWrapper){
+        try{
+            List<TodoDTO> todoDTOS = todoWrapper.getTodoDTOS();
+            System.out.println(todoDTOS);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return null;
+    }
 
+    /*
     @PostMapping("/todos")
     public ResponseEntity<?> createTodo(@RequestBody TodoDTO todo){
         try{
@@ -44,6 +57,8 @@ public class TodoController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+     */
 
     @GetMapping("/todos/{id}")
     public ResponseEntity<?> getSingleTodos(@PathVariable("id") String id){
