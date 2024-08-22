@@ -1,9 +1,9 @@
 package in.example.springbootmongodb.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import in.example.springbootmongodb.dto.TodoWrapper;
 import in.example.springbootmongodb.model.TodoDTO;
 import in.example.springbootmongodb.repository.ToDoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +34,11 @@ public class TodoController {
     }
 
     @PostMapping("/todos")
-    public ResponseEntity<?> createTodo(@RequestBody TodoWrapper todoWrapper){
+    public ResponseEntity<?> createTodo(@RequestBody List<TodoDTO> todoDTO){
         try{
-            List<TodoDTO> todoDTOS = todoWrapper.getTodoDTOS();
-            System.out.println(todoDTOS);
+            for(int i = 0; i < todoDTO.size(); i++) {
+                todoRepo.save(todoDTO.get(i));
+            }
         }
         catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
